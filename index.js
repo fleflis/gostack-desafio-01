@@ -84,3 +84,5 @@ server.post('/projects/:id/tasks', (req, res) => {
 	project.tasks.push(title);
 	return res.json(project);
 });
+
+server.listen(3000);
