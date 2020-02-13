@@ -60,3 +60,10 @@ server.put('/projects/:id', checkProjectExists, (req, res) => {
 
 	return res.json(project);
 });
+
+server.delete('/projects/:id', checkProjectExists, (req, res) => {
+	const { id } = req.params;
+	const projectIndex = projects.findIndex(p => p.id === id);
+	projects.splice(projectIndex, 1);
+	return res.json({ ok: true });
+});
