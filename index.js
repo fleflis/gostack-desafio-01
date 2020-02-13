@@ -6,6 +6,17 @@ server.use(express.json());
 
 const projects = [];
 
+function checkProjectExists(req, res, next) {
+	const { id } = req.params;
+	const projectExists = projects.find(p => p.id === id);
+	if (!projectExists) {
+		return res
+			.status(400)
+			.json({ error: 'Project with this ID does not exists.' });
+	}
+	return next();
+}
+
 server.post('/projects', (req, res) => {
 	const { id, title } = req.body;
 	if (!id || !title) {
@@ -32,4 +43,20 @@ server.post('/projects', (req, res) => {
 
 server.get('/projects', (_req, res) => {
 	res.json(projects);
+});
+
+server.put('/projects/:id', checkProjectExists, (req, res) => {
+	const { id } = req.params;
+	const { title } = req.body;
+
+	if (!id || !title) {
+		res.status(400).json({
+			error: 'Bad request: Missing arguments.',
+		});
+	}
+
+	const project = projects.find(p => p.id === id);
+	project.title = title;
+
+	return res.json(project);
 });
