@@ -6,6 +6,12 @@ server.use(express.json());
 
 const projects = [];
 
+function countLog(_req, _res, next) {
+	console.count('Número de requisições');
+
+	return next();
+}
+
 function checkProjectExists(req, res, next) {
 	const { id } = req.params;
 	const projectExists = projects.find(p => p.id === id);
@@ -16,6 +22,7 @@ function checkProjectExists(req, res, next) {
 	}
 	return next();
 }
+server.use(countLog);
 
 server.post('/projects', (req, res) => {
 	const { id, title } = req.body;
